@@ -1,6 +1,4 @@
-# config_prompts.py - Configuration des prompts
 
-# config_prompts.py - Version optimisée pour Groq
 
 QUESTION_COMPLEXITY_CHECKER_PROMPT = """Analyze this technical question and determine if it's complex.
 
