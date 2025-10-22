@@ -1,3 +1,4 @@
+# app_test.py - Application Streamlit pour tester le pipeline
 
 import streamlit as st
 import json
@@ -30,19 +31,19 @@ st.markdown("""
 
 st.markdown('<h1 class="main-header">🔍 StackRAG Pipeline - Test (Étapes 1-4)</h1>', unsafe_allow_html=True)
 
-with st.expander(" À propos du pipeline", expanded=False):
+with st.expander("ℹ️ À propos du pipeline", expanded=False):
     st.markdown("""
     ### Pipeline StackRAG avec WebFilter
     
     Ce système traite votre question en 4 étapes:
     
-    1. **Réception**: Validation et préparation
-    2. ** Analyse**: Décomposition si nécessaire
-    3. ** Mots-clés**: Extraction intelligente
-    4. ** WebFilter**: Requêtes optimisées
+    1. **📥 Réception**: Validation et préparation
+    2. **🔍 Analyse**: Décomposition si nécessaire
+    3. **🔑 Mots-clés**: Extraction intelligente
+    4. **🔄 WebFilter**: Requêtes optimisées
     """)
 
-st.markdown("###  Posez votre question technique")
+st.markdown("### 💬 Posez votre question technique")
 user_prompt = st.text_area(
     "Entrez votre question:",
     placeholder="Ex: Comment implémenter une API REST avec JWT en Python?",
@@ -52,37 +53,37 @@ user_prompt = st.text_area(
 col1, col2 = st.columns([1, 1])
 
 with col1:
-    submit_button = st.button(" Lancer le pipeline", type="primary")
+    submit_button = st.button("🚀 Lancer le pipeline", type="primary")
 
 with col2:
-    if st.button(" Effacer"):
+    if st.button("🗑️ Effacer"):
         st.rerun()
 
 if "pipeline_results" not in st.session_state:
     st.session_state.pipeline_results = None
 
 if submit_button and user_prompt:
-    with st.spinner(" Traitement en cours..."):
+    with st.spinner("⏳ Traitement en cours..."):
         try:
             results = run_stackrag_pipeline(user_prompt)
             st.session_state.pipeline_results = results
-            st.success("Pipeline complété avec succès!")
+            st.success("✅ Pipeline complété avec succès!")
             
         except Exception as e:
-            st.error(f" Erreur: {str(e)}")
+            st.error(f"❌ Erreur: {str(e)}")
 
 if st.session_state.pipeline_results:
     results = st.session_state.pipeline_results
     
     st.markdown("---")
-    st.markdown("## Résultats du Pipeline")
+    st.markdown("## 📊 Résultats du Pipeline")
     
     tab1, tab2, tab3, tab4, tab_all = st.tabs([
-        " Étape 1",
-        " Étape 2",
-        " Étape 3",
-        " Étape 4",
-        " JSON"
+        "📥 Étape 1",
+        "🔍 Étape 2",
+        "🔑 Étape 3",
+        "🔄 Étape 4",
+        "📋 JSON"
     ])
     
     with tab1:
@@ -102,22 +103,22 @@ if st.session_state.pipeline_results:
         step2 = results.get("step2_complexity", {})
         is_complex = step2.get("is_complex", False)
         if is_complex:
-            st.success(" Question complexe - Décomposée")
+            st.success("✅ Question complexe - Décomposée")
         else:
-            st.info(" Question simple")
+            st.info("ℹ️ Question simple")
         st.markdown("**Sous-questions:**")
         for i, sq in enumerate(step2.get("sub_questions", []), 1):
             st.markdown(f"{i}. {sq}")
     
     with tab3:
-        st.markdown('<div class="step-header"><h3> ÉTAPE 3: Mots-clés</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="step-header"><h3>🔑 ÉTAPE 3: Mots-clés</h3></div>', unsafe_allow_html=True)
         step3 = results.get("step3_keywords", {})
         st.metric("Mots-clés uniques", step3.get("total_count", 0))
         keywords = step3.get("unique_keywords", [])
         st.write(", ".join([f"`{k}`" for k in keywords]))
     
     with tab4:
-        st.markdown('<div class="step-header"><h3> ÉTAPE 4: WebFilter</h3></div>', unsafe_allow_html=True)
+        st.markdown('<div class="step-header"><h3>🔄 ÉTAPE 4: WebFilter</h3></div>', unsafe_allow_html=True)
         step4 = results.get("step4_reformulation", {})
         st.metric("Requêtes générées", step4.get("query_count", 0))
         
@@ -129,7 +130,7 @@ if st.session_state.pipeline_results:
     with tab_all:
         json_str = json.dumps(results, indent=2, ensure_ascii=False)
         st.download_button(
-            label=" Télécharger JSON",
+            label="💾 Télécharger JSON",
             data=json_str,
             file_name="stackrag_results.json",
             mime="application/json"
@@ -137,13 +138,13 @@ if st.session_state.pipeline_results:
         st.json(results)
 
 with st.sidebar:
-    st.markdown("###  Exemples")
+    st.markdown("### 💡 Exemples")
     examples = [
         "How to sort a list in Python?",
         "Implement JWT authentication in Flask",
         "Compare React hooks vs Vue composition API"
     ]
     for ex in examples:
-        if st.button(f" {ex[:30]}...", key=ex):
+        if st.button(f"📝 {ex[:30]}...", key=ex):
             st.session_state.example = ex
             st.rerun()
