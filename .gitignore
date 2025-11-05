@@ -1,0 +1,12 @@
+# Environnement virtuel
+.env
+.env.example
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+*.idea/
+
+# Logs
+*.log
